@@ -8,6 +8,10 @@ const STATUS_FILE = path.join(os.homedir(), '.claude', 'vscode-status');
 let statusBarItem: vscode.StatusBarItem;
 let watcher: fs.FSWatcher | undefined;
 
+function isEnabled(): boolean {
+	return vscode.workspace.getConfiguration('claude-code-focus').get('enabled', true);
+}
+
 function updateStatus(status: string): void {
 	const trimmed = status.trim();
 
@@ -28,6 +32,9 @@ function updateStatus(status: string): void {
 }
 
 function readAndUpdate(): void {
+	if (!isEnabled()) {
+		return;
+	}
 	try {
 		const content = fs.readFileSync(STATUS_FILE, 'utf-8');
 		updateStatus(content);

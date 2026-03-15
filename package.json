@@ -25,7 +25,18 @@
     "onStartupFinished"
   ],
   "main": "./out/extension.js",
-  "contributes": {},
+  "contributes": {
+    "configuration": {
+      "title": "Claude Code Focus",
+      "properties": {
+        "claude-code-focus.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable automatic terminal panel control."
+        }
+      }
+    }
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
