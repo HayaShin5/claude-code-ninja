@@ -17,22 +17,19 @@ While Claude Code is working autonomously, the terminal panel is closed to maxim
 
 ## How It Works
 
+```mermaid
+flowchart LR
+    A[Claude Code] -- hooks --> B["~/.claude/vscode-status"]
+    B -- fs.watch --> C[VSCode Extension]
+    C --> D[Terminal Panel Control]
+    C --> E[Status Bar Update]
 ```
-Claude Code (hooks)                 VSCode Extension
-──────────────────                  ──────────────────────
-Notification fires
-  → writes "waiting" to            ← watches via fs.watch
-    ~/.claude/vscode-status
-                                       → open terminal + focus
 
-PostToolUse fires
-  → writes "working"               ←
-                                       → close panel
-
-Stop fires
-  → writes "idle"                  ←
-                                       → close panel
-```
+| Hook Event | Status File | Extension Action |
+|---|---|---|
+| `Notification` | `waiting` | Open terminal + focus |
+| `PostToolUse` | `working` | Close panel |
+| `Stop` | `idle` | Close panel |
 
 ## Setup
 
