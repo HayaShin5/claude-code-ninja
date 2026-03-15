@@ -58,31 +58,21 @@ function readAndUpdate(): void {
 }
 
 function startWatching(): void {
-	const dir = path.dirname(STATUS_FILE);
-
 	try {
-		fs.accessSync(dir);
+		fs.accessSync(CLAUDE_DIR);
 	} catch {
 		// ~/.claude/ doesn't exist — do nothing
 		return;
 	}
 
-	try {
-		watcher = fs.watch(STATUS_FILE, () => {
+	// Watch the directory instead of the file directly.
+	// fs.watch on a file can miss events on macOS when the file is overwritten.
+	watcher = fs.watch(CLAUDE_DIR, (_, filename) => {
+		if (filename === path.basename(STATUS_FILE)) {
 			readAndUpdate();
-		});
-		watcher.on('error', () => {
-			// File may not exist yet — ignore
-		});
-	} catch {
-		// File doesn't exist yet — watch the directory instead
-		watcher = fs.watch(dir, (_, filename) => {
-			if (filename === path.basename(STATUS_FILE)) {
-				readAndUpdate();
-			}
-		});
-		watcher.on('error', () => {});
-	}
+		}
+	});
+	watcher.on('error', () => {});
 }
 
 async function setupHooks(): Promise<void> {
