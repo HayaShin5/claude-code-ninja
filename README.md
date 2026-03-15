@@ -1,54 +1,52 @@
 # Claude Code Focus
 
-Claude Codeの状態に応じてVSCodeのターミナルパネルを自動制御する拡張機能。
+A VSCode extension that automatically controls the terminal panel based on Claude Code's status.
 
-自律作業中はターミナルパネルを閉じて画面を広く使い、ユーザーの確認が必要になったら自動でターミナルを開いてフォーカスします。
+While Claude Code is working autonomously, the terminal panel is closed to maximize your editor space. When user input is needed, the terminal opens and focuses automatically.
 
-## 動作
+## Behavior
 
-| 状態 | ターミナルパネル | ステータスバー |
+| Status | Terminal Panel | Status Bar |
 |---|---|---|
-| `working` | 閉じる | 🤖 Claude: 作業中 |
-| `waiting` | 開く＋フォーカス | ⚠️ Claude: 要確認 |
-| `idle` | 閉じる | ✅ Claude: 完了 |
-| 起動時 | 変更しない | 💤 Claude: 待機中 |
+| `working` | Close | 🤖 Claude: Working |
+| `waiting` | Open + Focus | ⚠️ Claude: Needs Input |
+| `idle` | Close | ✅ Claude: Done |
+| On startup | No change | 💤 Claude: Idle |
 
-## 仕組み
+> **Note:** When the status is `working` or `idle`, the entire bottom panel is closed — not just the terminal. If you have the Problems or Output panel open, it will also be closed.
+
+## How It Works
 
 ```
-Claude Code (hooks)                 VSCode拡張機能
+Claude Code (hooks)                 VSCode Extension
 ──────────────────                  ──────────────────────
-Notification発火
-  → ~/.claude/vscode-status に      ← fs.watch で監視
-    "waiting" を書き込む
-                                        → ターミナルを開く＋フォーカス
+Notification fires
+  → writes "waiting" to            ← watches via fs.watch
+    ~/.claude/vscode-status
+                                       → open terminal + focus
 
-PostToolUse発火
-  → "working" を書き込む            ←
-                                        → ターミナルを閉じる
+PostToolUse fires
+  → writes "working"               ←
+                                       → close panel
 
-Stop発火
-  → "idle" を書き込む               ←
-                                        → ターミナルを閉じる
+Stop fires
+  → writes "idle"                  ←
+                                       → close panel
 ```
 
-## セットアップ
+## Setup
 
-### 1. 拡張機能のインストール
+### 1. Install the Extension
 
-```bash
-# リポジトリをクローンしてビルド
-npm install
-npm run compile
+Search for **"Claude Code Focus"** in the VSCode Extensions panel, or run:
 
-# VSIXパッケージを作成してインストール
-npx vsce package
-code --install-extension claude-code-focus-0.0.1.vsix
+```
+ext install HayaShin5.claude-code-focus
 ```
 
-### 2. Claude Code hooks の設定
+### 2. Configure Claude Code Hooks
 
-`~/.claude/settings.json` に以下を追加:
+Add the following to your `~/.claude/settings.json`:
 
 ```json
 {
@@ -81,17 +79,21 @@ code --install-extension claude-code-focus-0.0.1.vsix
 }
 ```
 
-## 開発
+## Development
 
 ```bash
 npm install
-npm run watch    # TypeScriptをウォッチモードでコンパイル
+npm run watch
 ```
 
-`F5` で拡張機能のデバッグ実行。手動テスト:
+Press `F5` to launch the extension in debug mode. To test manually:
 
 ```bash
 echo 'waiting' > ~/.claude/vscode-status
 echo 'working' > ~/.claude/vscode-status
 echo 'idle' > ~/.claude/vscode-status
 ```
+
+## License
+
+MIT
