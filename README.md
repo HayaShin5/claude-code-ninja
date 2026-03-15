@@ -13,23 +13,7 @@ While Claude Code is working autonomously, the terminal panel is closed to maxim
 | `idle` | Open + Focus | ✅ Claude: Done |
 | On startup | No change | 💤 Claude: Idle |
 
-> **Note:** When the status is `working` or `idle`, the entire bottom panel is closed — not just the terminal. If you have the Problems or Output panel open, it will also be closed.
-
-## How It Works
-
-```mermaid
-flowchart LR
-    A[Claude Code] -- hooks --> B["~/.claude/vscode-status"]
-    B -- fs.watch --> C[VSCode Extension]
-    C --> D[Terminal Panel Control]
-    C --> E[Status Bar Update]
-```
-
-| Hook Event | Status File | Extension Action |
-|---|---|---|
-| `Notification` | `waiting` | Open terminal + focus |
-| `PostToolUse` | `working` | Close panel |
-| `Stop` | `idle` | Open terminal + focus |
+> **Note:** When the status is `working`, the entire bottom panel is closed — not just the terminal. If you have the Problems or Output panel open, it will also be closed.
 
 ## Setup
 
