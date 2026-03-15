@@ -2,7 +2,7 @@
   "name": "claude-code-ninja",
   "displayName": "ClaudeCodeNinja",
   "description": "Claude Code works silently in the background. You don't need to watch.",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "icon": "assets/icon.png",
   "publisher": "HayaShin5",
   "license": "MIT",
