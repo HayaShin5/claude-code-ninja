@@ -3,11 +3,23 @@
   "displayName": "Claude Code Focus",
   "description": "Auto-control terminal panel based on Claude Code status",
   "version": "0.0.1",
+  "publisher": "HayaShin5",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HayaShin5/claude-code-focus"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
     "Other"
+  ],
+  "keywords": [
+    "claude",
+    "claude-code",
+    "terminal",
+    "automation"
   ],
   "activationEvents": [
     "onStartupFinished"
